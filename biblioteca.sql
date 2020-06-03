@@ -60,7 +60,7 @@ SELECT
 FROM
     tb_editora;
 
-INSERT INTO tb_livro (titulo, preco, id_editora) VALUES ('Banco de dados', 100.0, 1), ('SGBD', 120.00, 2), ('Redes de omputadores', 90.00, 2);
+INSERT INTO tb_livro (titulo, preco, id_editora) VALUES ('Banco de dados', 100.0, 1), ('SGBD', 120.00, 2), ('Redes de computadores', 90.00, 2), ('Binco de dados', 10.0, 1);
 
 SELECT 
     *
@@ -87,3 +87,146 @@ SELECT
     *
 FROM
     tb_funcionario;
+    
+UPDATE tb_editora 
+SET 
+    endereco = 'AV. ACM'
+WHERE
+    id_editora = 2;
+    
+SELECT 
+    *
+FROM
+    tb_editora;
+
+UPDATE tb_livro 
+SET 
+    preco = preco * 1.10
+WHERE
+    id_livro > 0;
+
+SELECT 
+    *
+FROM
+    tb_livro;
+
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE tb_editora 
+SET 
+    endereco = NULL
+WHERE
+    descricao = 'Campus';
+    
+SELECT 
+    *
+FROM
+    tb_editora;
+
+DELETE FROM tb_editora 
+WHERE
+    descricao = 'Globo';
+
+SELECT 
+    *
+FROM
+    tb_editora;
+
+SELECT 
+    nome, dt_nasc
+FROM
+    tb_autor;
+
+SELECT 
+    nome, dt_nasc
+FROM
+    tb_autor
+WHERE
+    sexo = 'F'
+ORDER BY nome;
+
+SELECT 
+    descricao
+FROM
+    tb_editora
+WHERE
+    endereco IS NULL;
+    
+SELECT 
+    titulo, descricao
+FROM
+    tb_livro,
+    tb_editora
+WHERE
+    tb_livro.id_editora = tb_editora.id_editora;
+    
+SELECT 
+    livro.titulo, editora.descricao
+FROM
+    tb_livro AS livro,
+    tb_editora AS editora
+WHERE
+    livro.id_editora = editora.id_editora;
+
+SELECT 
+    livro.titulo, editora.descricao
+FROM
+    tb_livro AS livro
+        JOIN
+    tb_editora AS editora ON livro.id_editora = editora.id_editora;
+
+SELECT DISTINCT
+    editora.descricao
+FROM
+    tb_livro AS livro
+        JOIN
+    tb_editora AS editora ON livro.id_editora = editora.id_editora;
+    
+SELECT 
+    livro.titulo, editora.descricao
+FROM
+    tb_livro AS livro
+        RIGHT JOIN
+    tb_editora AS editora ON livro.id_editora = editora.id_editora;
+    
+SELECT 
+    livro.titulo, autor.nome
+FROM
+    tb_livro AS livro
+        JOIN
+    tb_autoria AS autoria ON livro.id_livro = autoria.id_livro
+        JOIN
+    tb_autor AS autor ON autor.id_autor = autoria.id_autor;
+    
+SELECT 
+    titulo
+FROM
+    tb_livro
+WHERE
+    UPPER(titulo) LIKE 'B_NCO%';
+
+SELECT 
+    titulo
+FROM
+    tb_livro
+WHERE
+    UPPER(titulo) LIKE '%DO%';
+    
+SELECT 
+    titulo, preco, preco * 1.05 AS preco_reajustado
+FROM
+    tb_livro;
+    
+SELECT 
+    COUNT(*) AS quantidade_livros,
+    SUM(preco) AS soma_precos,
+    AVG(preco) AS media_precos,
+    MIN(preco) AS menor_preco,
+    MAX(preco) AS maior_preco
+FROM
+    tb_livro;
+    
+SELECT 
+    MIN(dt_nasc) AS menor_dt_nasc
+FROM
+    tb_autor;
