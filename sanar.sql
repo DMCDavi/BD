@@ -460,9 +460,9 @@ HAVING qntd_vendidos = (SELECT
         GROUP BY id_cliente) AS produtos_vendidos);
         
 # -------------------------------------------------------
-# 
+# RETORNA O CLIENTE QUE MAIS APROVEITOU AS PROMOÇÕES E QUE O PEDIDO FOI COMPLETADO
 SELECT 
-    cli.nome, SUM(ped.quantidade) AS qntd_promo_comprados
+    cli.nome
 FROM
     cliente AS cli
         INNER JOIN
@@ -471,8 +471,10 @@ FROM
     produtos AS pro ON pro.id = id_produto
 WHERE
     em_promo = 1
+        AND status_pedido != 'Criado'
+        AND status_pedido != 'Abandonado'
 GROUP BY id_cliente
-HAVING qntd_promo_comprados = (SELECT 
+HAVING SUM(ped.quantidade) = (SELECT 
         MAX(qntd_promo_comprados) AS max_promo_comp
     FROM
         (SELECT 
@@ -483,4 +485,6 @@ HAVING qntd_promo_comprados = (SELECT
         INNER JOIN produtos AS pro ON pro.id = id_produto
         WHERE
             em_promo = 1
+                AND status_pedido != 'Criado'
+                AND status_pedido != 'Abandonado'
         GROUP BY cli.id) AS promo_comprados);
