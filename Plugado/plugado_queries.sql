@@ -16,7 +16,7 @@ FROM
 WHERE
     YEAR(data_hora) = 2015
 GROUP BY tb_produto.nome
-HAVING preco_total < 400
+HAVING valor_total < 400
     OR quantidade_total < 4
 ORDER BY quantidade , valor_total;
 
@@ -34,10 +34,8 @@ WHERE
             tb_pedido_produto USING (id_pedido)
                 INNER JOIN
             tb_status USING (id_status)
-                INNER JOIN
-            tb_produto USING (id_produto)
         WHERE
-            tb_status.nome = 'Feito'
+            UPPER(tb_status.nome) = 'FEITO'
                 AND MINUTE(data_hora) IN (MINUTE((SELECT 
                         data_hora
                     FROM
@@ -68,28 +66,26 @@ WHERE
                 INNER JOIN
             tb_status AS S USING (id_status)
         WHERE
-            S.nome = 'Pago');
+            UPPER(S.nome) = 'PAGO');
             
 -- Retorna todos os produtos disponíveis na loja
 SELECT 
-    nome, descricao, preco, estoque
+    *
 FROM
     tb_produto
 WHERE
     estoque >= 1;
 
--- Informa quantas pessoas confirmaram presença num determinado evento.
+-- Informa quantas e quais pessoas confirmaram presença num determinado evento.
 SELECT 
-    COUNT(*)
+    COUNT(*) AS pessoas_confirmadas
 FROM
     tb_cliente
         INNER JOIN
     tb_cliente_evento AS E USING (id_cliente)
 WHERE
-    id_evento = 2;
-
--- Informa quais pessoas confirmaram presença num determinado evento.
-SELECT 
+    id_evento = 2 
+UNION SELECT 
     nome
 FROM
     tb_cliente
@@ -105,16 +101,56 @@ FROM
     tb_pedido_status AS P
         INNER JOIN
     tb_status AS S USING (id_status);
-    
+
+-- Retorna uma relação mensal de preço e quantidade das 3 categorias de produtos vendidos no ano de 2015;
 SELECT 
-    MONTH(periodo) AS Mês,
-    SUM(preco_unitario * quant_vendida) AS Tirante
+    'Mídia' AS tipo_produto,
+    MONTH(data_hora) AS mes,
+    SUM(preco_total) AS receita_mensal,
+    SUM(quantidade) AS quantidade_vendidos
 FROM
-    produto
-        JOIN
-    orcamento_produto USING (id_produto)
-        JOIN
-    despesa_orcamento_produto USING (id_orcamento_produto)
+    tb_pedido_status
+        INNER JOIN
+    tb_status USING (id_status)
+        INNER JOIN
+    tb_pedido_produto USING (id_pedido)
+        INNER JOIN
+    tb_obra_midia USING (id_produto)
 WHERE
-    UPPER(tipo) = 'TIRANTE'
-GROUP BY MONTH(periodo);
+    UPPER(tb_status.nome) = 'PAGO'
+        AND YEAR(data_hora) = 2015
+GROUP BY mes , tipo_produto 
+UNION SELECT 
+    'Roupa' AS tipo_produto,
+    MONTH(data_hora) AS mes,
+    SUM(preco_total) AS receita_mensal,
+    SUM(quantidade) AS quantidade_vendidos
+FROM
+    tb_pedido_status
+        INNER JOIN
+    tb_status USING (id_status)
+        INNER JOIN
+    tb_pedido_produto USING (id_pedido)
+        INNER JOIN
+    tb_roupa_tamanho_cor USING (id_produto)
+WHERE
+    UPPER(tb_status.nome) = 'PAGO'
+        AND YEAR(data_hora) = 2015
+GROUP BY mes , tipo_produto 
+UNION SELECT 
+    'Bebida' AS tipo_produto,
+    MONTH(data_hora) AS mes,
+    SUM(preco_total) AS receita_mensal,
+    SUM(quantidade) AS quantidade_vendidos
+FROM
+    tb_pedido_status
+        INNER JOIN
+    tb_status USING (id_status)
+        INNER JOIN
+    tb_pedido_produto USING (id_pedido)
+        INNER JOIN
+    tb_recipiente_bebida USING (id_produto)
+WHERE
+    UPPER(tb_status.nome) = 'PAGO'
+        AND YEAR(data_hora) = 2015
+GROUP BY mes , tipo_produto;
