@@ -165,3 +165,64 @@ AS
 SELECT * FROM NOME_VIEW
 WHERE ACERVO >= 2
 ORDER BY DESCRICAO;
+
+-- Calcular a área do triângulo e apresentar na tela
+DECLARE
+    vBase number;
+    vAltura number;
+    vArea number;
+BEGIN
+    -- vBase := 2;
+    -- vAltura := 3;
+    vArea := &vBase * &vAltura / 2;
+    DBMS_OUTPUT.PUT_LINE('A área da figura é: ' || vArea);
+END;
+
+ALTER SESSION SET NLS_DATE_FORMAT = 'DD/MM/YYYY';
+
+DECLARE
+    vDataPedido Date := '01/04/2010';
+    vDataEntrega Date;
+    vDataAtual Date;
+BEGIN
+    DBMS_OUTPUT.PUt_LINE('A data do pedido é: ' || vDataPedido);
+    vDataEntrega := vDataPedido + 2;
+    DBMS_OUTPUT.PUT_LINE('A data da entrega é: ' ||  vDataEntrega);
+    DBMS_OUTPUT.PUT_LINE('A data atual do servidor é: ' ||  sysdate);
+    DBMS_OUTPUT.PUT_LINE('A data/hora atual do servidor é: ' ||  to_char(sysdate, 'dd-mm-yyyy hh24:mi:ss'));
+    DBMS_OUTPUT.PUT_LINE('A quantidade de dias é: ' ||  (sysdate - vDataPedido));
+    DBMS_OUTPUT.PUT_LINE('A quantidade de dias é: ' ||  floor(sysdate - vDataPedido));
+END;
+
+DECLARE
+    vLado1 number;
+    vLado2 number;
+    vLado3 number;
+BEGIN
+    vLado1 := 1;
+    vLado2 := 3;
+    vLado3 := 2;
+    IF ( (vLado1 = vLado2) AND ( vLado1 = vLado3 ) ) THEN
+        DBMS_OUTPUT.PUT_LINE('O triângulo é equilátero');
+    ELSIF ( (vLado1 <> vLado2) AND ( vLado1 <> vLado3 ) AND ( vLado2 <> vLado3 ) ) THEN
+        DBMS_OUTPUT.PUT_LINE('O triângulo é escaleno');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('O triângulo é isósceles');
+    END IF;
+END;
+
+DECLARE
+    vEstCivil char(01);
+BEGIN
+    vEstCivil := 'C';
+    CASE vEstCivil
+        WHEN 'S' THEN
+            DBMS_OUTPUT.PUT_LINE('Solteiro');
+        WHEN 'C' THEN
+            DBMS_OUTPUT.PUT_LINE('Casado');
+        WHEN 'V' THEN
+            DBMS_OUTPUT.PUT_LINE('Viúvo');
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Outros');
+    END CASE;
+END;
