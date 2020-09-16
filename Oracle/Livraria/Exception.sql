@@ -28,7 +28,7 @@ BEGIN
         
     EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('Consulta não retornou nenhum registro');
+        DBMS_OUTPUT.PUT_LINE('Consulta nï¿½o retornou nenhum registro');
         ROLLBACK;
     WHEN TOO_MANY_ROWS THEN
         DBMS_OUTPUT.PUT_LINE('Consulta retornou mais de um registro');
