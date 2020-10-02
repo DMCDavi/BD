@@ -106,7 +106,7 @@ END;
 
 INSERT INTO TB_ITENS_PEDIDO VALUES (SQ_ITENS_PEDIDO.NEXTVAL,1,1,1,50.00);
 
--- Muda a data de entrega automaticamente para 5 dias após a data do pedido
+-- Muda a data de entrega automaticamente para 5 dias apï¿½s a data do pedido
 CREATE OR REPLACE TRIGGER TR_DATA_ENTREGA
 BEFORE INSERT
 ON TB_PEDIDO
